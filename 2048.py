@@ -1,9 +1,14 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import random
+import os
 
 app = Flask(__name__)
 CORS(app)
+
+@app.route('/2048.html')
+def serve_2048():
+    return send_from_directory('.', '2048.html')
 
 class Game2048:
     def __init__(self):
@@ -19,7 +24,6 @@ class Game2048:
             self.grid[i][j] = 2 if random.random() < 0.9 else 4
     
     def move(self, direction):
-        # 0: up, 1: right, 2: down, 3: left
         moved = False
         
         if direction == 0:  # up
@@ -91,7 +95,6 @@ class Game2048:
         
         return moved
 
-# Store games in memory (in production, use a database)
 games = {}
 
 @app.route('/new', methods=['POST'])
@@ -123,4 +126,5 @@ def move():
     })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
