@@ -1,9 +1,12 @@
-def mirror_words(x):
-   
-    # Split the text into words, reverse each word, then join back
-    return ' '.join(word[::-1] for word in text.split())
+from flask import Flask
+import os
 
-text = "Bank Security"
-result = mirror_words(text)
-result
+app = Flask(__name__)
 
+@app.route('/')
+def hello():
+    return "Hello World! This app is working!"
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
